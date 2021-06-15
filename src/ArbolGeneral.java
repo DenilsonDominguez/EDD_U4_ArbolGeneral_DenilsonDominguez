@@ -34,25 +34,32 @@ public class ArbolGeneral {
         return padre.enlazar(nuevo);
     }
 
-    public nodoGeneral buscarNodo(String path) {
+    public NodoGeneral buscarNodo(String path){
         
-        path =path.substring(1);
+        if(path.isEmpty()){
+            return null;
+        }
         
-        String vector[] = path.split("/");
+        path = path.substring(1);
         
-        if(vector[0].charAt(0) == raiz.valor){
-            if(vector.length==1) return raiz;
-            nodoGeneral padre = raiz;
-            
-            for(int i= 1;i<vector.length; i++ ){
-                padre = padre.obtenerHijo(vector[i].charAt(0));
-                if(padre==null) return null;
-                
+        String[] vector = path.split("/");
+        
+        if(raiz.valor == vector[0].charAt(0)){
+           
+            if(vector.length == 1){
+                return raiz;
             }
-            return padre;
-        } 
-         return null;   
-
+            for(NodoLiga temp = raiz.ini; temp != null; temp = temp.sig){
+                if(temp.direccion.valor == vector[1].charAt(0)){
+                    if(vector.length == 2){
+                        return temp.direccion;
+                    }
+                    return buscarNodo(temp.direccion, path.substring(3));
+                }
+            }
+        }
+        
+        return null;
     }
     
     protected nodoGeneral buscarNodo(nodoGeneral nodoEncontrado, String path){        
